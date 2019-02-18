@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Registrationpage</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="images/NIT_Durgapur_Logo.png"/>
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/util.css">
+	<link rel="stylesheet" type="text/css" href="assets/main.css">
+	<link rel="stylesheet" href="assets/styles.css" />
+	<script src="assets/js/jquery-3.3.1.min.js"></script>
+	<script src="assets/js/registration.js"></script>
+	
+
+</head>
+<!-- -------------------navbar------------------------ -->
+<body>	
+	
+		<div class="navbar_class">
+				<header id="header">
+					<nav>
+							<ul>
+									<li><a>About Us</a></li>
+									<li><a>Home</a></li>
+									<li><a>Sign Up</a></li>
+							</ul>
+					</nav>
+				</header>
+			</div>
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-pic js-tilt" data-tilt>
+					<img src="images/NIT_Durgapur_Logo.png" alt="IMG">
+				</div>
+				
+
+				<form class="login100-form validate-form" id="reg_form">
+					<span class="login100-form-title">
+						Student Registration
+					</span>
+					<!-- -------------------username------------------------------------- -->
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="Username">Username</label>
+						
+						<input class="input100" type="text" id="username" placeholder="Username">
+					</div>
+
+<!-- ------------------------------------------password---------------------------------- -->
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="password1">Password</label>
+						<input class="input100" type="password" id="password1" placeholder="password">
+					</div>
+
+<!-- -------------------------------------------------confirm password---------------------------------- -->
+
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="password2">Confirm Password</label>
+						<input class="input100" type="password" id="password2" placeholder="repeat password">
+					</div>
+
+<!-- =--------------------------------------------name------------------------------------------ -->
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="name">Name</label>
+						<input class="input100" type="text" id="name" placeholder="Your name">
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="gender">Gender:</label>
+										<label for="male">Male</label>
+										<input type="radio" id="male" value="male" checked>
+										<label for="female">Female</label>
+										<input type="radio" id="female" value="female">
+										<label for="Other">Other</label>
+										<input type="radio" id="other" value="other">  
+									
+									</div>
+<!-- -------------------------------------------------email--------------------------------------- -->
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+						<label for="email">Email</label>
+						<input class="input100" type="email" id="email" placeholder="Email">
+					</div>
+<!-- ---------------------------------age---------------------------------------- -->
+
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="age">Age</label>
+						<input class="input100" type="number" id="age" placeholder="Age">
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="branch">Branch</label>
+						<!-- <input class="input100" type="text" name="email" placeholder="Branch"> -->
+						<select id="branch"> 
+								<option value="1">BIOTECHNOLOGY</option>
+								<option value="2">IT</option>
+								<option value="3">ME</option>
+								<option value="4">ECE</option>
+								<option value="5">EE</option>
+								<option value="6">MME</option>
+	
+							</select>
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="semester">Semester</label>
+						<!-- <input class="input100" type="text" name="email" placeholder="Semester" > -->
+						<select id="semester">
+							<option value="1">sem1</option>
+							<option value="2">sem2</option>
+							<option value="3">sem3</option>
+							<option value="4">sem4</option>
+							<option value="5">sem5</option>
+							<option value="6">sem6</option>
+
+						</select>
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="phone">Phone No.</label>
+						<input class="input100" type="number" id="phone" placeholder="Phone no.">
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="address">Address</label>
+						 <textarea rows="4" cols="50" id="address"></textarea>
+					</div>
+					<!-- <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                        <p>Other</p>
+						<input class="input100" type="text" name="email" placeholder="Other any field to create">
+					</div> -->
+					<!-- <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz" class="input100" >
+                        <p class="form-support-text">Name</p>
+						<input type="text" name="email" class="input-field" placeholder="Email">
+					</div> -->
+					
+					<div class="container-login100-form-btn">
+						<button type="submit" class="login100-form-btn">
+							Register
+						</button>
+					</div>
+
+					<!-- <div class="text-center p-t-12">
+						<span class="txt1">
+							Forgot
+						</span>
+						<a class="txt2" href="#">
+							Username / Password?
+						</a>
+					</div> -->
+
+					<!-- <div class="text-center p-t-136">
+						<a class="txt2" href="#">
+							Create your Account
+							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+						</a>
+					</div> -->
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

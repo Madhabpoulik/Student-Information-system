@@ -1,0 +1,42 @@
+.studentInformationCentre{
+  font-family: Courier, monospace;
+}
+
+.navbar_class{
+font-family: 'Times New Roman', Times, serif;
+}
+
+/* Dimensions and detatils regarding logo */
+#nit_dgp_logo {
+width: 150px;
+height: 150px;
+}
+
+/* Id for text regarding cllege */
+#nit_info {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;
+}
+
+/* Class for the three containers */
+.contentBox {
+  border-color: black;
+}
+
+/* Smaller contatiners within contentBox  */ 
+
+/* Login */
+.login_container {
+
+}
+
+
+/* Notice board */
+.noticeBoard_container {
+
+}
+
+
+/* About us  */
+.abuotUs_container {
+
+}

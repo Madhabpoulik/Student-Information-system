@@ -11,11 +11,10 @@
 	<link rel="stylesheet" href="assets/styles.css" />
 	<script src="assets/js/jquery-3.3.1.min.js"></script>
 	<script src="assets/js/registration.js"></script>
-	
 
 </head>
 <!-- -------------------navbar------------------------ -->
-<body>	
+<body  onload="document.registration.userid.focus();">	
 	
 		<div class="navbar_class">
 				<header id="header">
@@ -36,7 +35,7 @@
 				</div>
 				
 
-				<form class="login100-form validate-form" id="reg_form">
+				<form name='registration' onSubmit="return formValidation();" class="login100-form validate-form" id="reg_form">
 					<span class="login100-form-title">
 						Student Registration
 					</span>

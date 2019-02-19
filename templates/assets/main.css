@@ -44,6 +44,17 @@ a {
 	margin: 0px;
 }
 
+
+.error {
+  
+  font-size: 12px;
+  color: #D63301;
+  background-color: #FFCCBA;
+}
+
+
+
+
 a:focus {
 	outline: none !important;
 }

@@ -1,0 +1,72 @@
+<style type="text/css">
+.cellpad{
+color:blue;
+padding:5px;
+}
+
+.gv{
+MARGIN:auto; BACKGROUND-COLOR: #d3f0d3; 
+}
+</style>
+    <style type="text/css">
+.Grid td
+        {
+            background-color: #A1DCF2;
+            color: black;
+            font-size: 10pt;
+            line-height:200%
+        }
+        .Grid th
+        {
+            background-color: #3AC0F2;
+            color: White;
+            font-size: 10pt;
+            line-height:200%
+        }
+        .ChildGrid td
+        {
+            background-color: #eee !important;
+            color: black;
+            font-size: 10pt;
+            line-height:200%
+        }
+        .ChildGrid th
+        {
+            background-color: #6C6C6C !important;
+            color: White;
+            font-size: 10pt;
+            line-height:200%
+        }
+        
+        
+        ul {
+    list-style-type: none;
+    margin-top: 10px;
+    margin-left:10px;
+    padding: 0;
+    width: 60%;
+    background-color: #CEF6D8;
+          }
+
+     li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+     }
+
+    .menutitle 
+    {
+    display: block;
+    padding: 8px 16px ;
+    text-decoration: none;
+    background-color: #4CAF50;
+    color: white;
+    }
+
+     li a:hover:not(.active) {
+    background-color: #585858;
+    color: white;
+   }
+        
+</style>

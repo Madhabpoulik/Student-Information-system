@@ -1,15 +1,57 @@
 $(document).ready(function(){
 
+
+
+    
+
     $('#reg_form').submit(function(e) {
         e.preventDefault();
         validate();    
       });
+
+    function isDate(txtDate)
+    {
+        console.log(currVal);
+        var currVal = txtDate;
+        if(!currVal)
+            return false;
+        if(currVal == '')
+            return false;
+        
+        var rxDatePattern = /^(\d{4})(\/|-)(\d{1,2})(\/|-)(\d{1,2})$/; //Declare Regex
+        var dtArray = currVal.match(rxDatePattern); // is format OK?
+        
+        if (dtArray == null) 
+            return false;
+        
+        //Checks for yyyy/mm/dd format.
+        dtMonth = dtArray[3];
+        dtDay= dtArray[5];
+        dtYear = dtArray[1];        
+        
+        if (dtMonth < 1 || dtMonth > 12) 
+            return false;
+        else if (dtDay < 1 || dtDay> 31) 
+            return false;
+        else if ((dtMonth==4 || dtMonth==6 || dtMonth==9 || dtMonth==11) && dtDay ==31) 
+            return false;
+        else if (dtMonth == 2) 
+        {
+            var isleap = (dtYear % 4 == 0 && (dtYear % 100 != 0 || dtYear % 400 == 0));
+            if (dtDay> 29 || (dtDay ==29 && !isleap)) 
+                    return false;
+        }
+        return true;
+    }
+
     
       function validate(){
         var username = $('#username').val();
         var name = $('#name').val();
         var email = $('#email').val();
-        var age = $('#age').val();
+        var dob = $('#dob').val();
+//        var age = $('#age').val();
+        var g_name = $('#guardian_name')
         var branch = $('#branch').val();
         var semester = $('#semester').val();
         var phone = $('#phone').val();
@@ -20,8 +62,12 @@ $(document).ready(function(){
         var usernamereg = /^[a-zA-Z0-9]+$/;
         var stringReg = /^[A-Za-z]+$/;
         var numberReg =  /^[0-9]+$/;
-        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/; 
     
+
+
+    
+
         $(".error").remove();
      
         if (username.length < 1) {
@@ -30,11 +76,18 @@ $(document).ready(function(){
         else if (!usernamereg.test(username)){
             $('#username').after('<span class="error">username can have only aplhanumeric characters</span>');
         }
+        
         if (name.length < 1) {
-          $('#name').after('<span class="error">This field is required</span>');
+            $('#name').after('<span class="error">This field is required</span>');
         }
         else if (!stringReg.test(name)){
             $('#name').after('<span class="error">invalid name</span>');
+        }
+        if (g_name.length < 1) {
+            $('#guardian_name').after('<span class="error">This field is required</span>');
+        }
+        else if (!stringReg.test(g_name)){
+            $('#guardian_name').after('<span class="error">invalid guardian name</span>');
         }
         if (email.length < 1) {
           $('#email').after('<span class="error">This field is required</span>');
@@ -52,12 +105,12 @@ $(document).ready(function(){
             $("#password1").val('');
             $("#password2").val('');
         }
-        if(age.length<1){
-            $("#age").after('<span class="error">this field is required</span>');
-        }
-        else if(age<0 || age > 100 || !numberReg.test(age)){
-            $("#age").after('<span class="error">invalid age</span>');
-        }
+        // if(age.length<1){
+        //     $("#age").after('<span class="error">this field is required</span>');
+        // }
+        // else if(age<0 || age > 100 || !numberReg.test(age)){
+        //     $("#age").after('<span class="error">invalid age</span>');
+        // }
         if(phone.length<1){
             $("#phone").after('<span class="error">This field is required</span>');
         }
@@ -67,14 +120,23 @@ $(document).ready(function(){
         if(address.length<1){
             $("#address").after('<span class="error">this field is required</span>');
         }
+        if(!isDate(dob)){
+            
+            $("#dob").after('<span class="error">invalid date</span>');
+        }
     
     }
-
+    $(".input100").change(function(){
+        validate();
+    })
+    
 
 
     function inline_validate(s){
         var username = $('#username').val();
         var name = $('#name').val();
+        var g_name = $('#guardian_name')
+        var dob = $('#dob').val()
         var email = $('#email').val();
         var age = $('#age').val();
         var branch = $('#branch').val();
@@ -114,6 +176,24 @@ $(document).ready(function(){
                 }
                 break
             }
+            case "guardian_name":{
+                $('#guardian_name ~ span:first').remove()
+                if (g_name.length < 1) {
+                $('#guardian_name').after('<span class="error">This field is required</span>');
+                }
+                else if (!stringReg.test(g_name)){
+                    $('#guardian_name').after('<span class="error">invalid guardian name</span>');
+                }
+                break
+            }
+            case "dob":{
+                $('#dob ~ span:first').remove()
+                if (!isDate(dob)) {
+                $('#dob').after('<span class="error">invalid date</span>');
+                }
+                break
+            }
+            
 
             case "email":{
                 $('#email ~ span:first').remove()
@@ -145,17 +225,17 @@ $(document).ready(function(){
                 }
                 break
             }   
-            case "age":{
-                $('#age ~ span:first').remove()
+            // case "age":{
+            //     $('#age ~ span:first').remove()
 
-                if(age.length<1){
-                    $("#age").after('<span class="error">this field is required</span>');
-                }
-                else if(age<0 || age > 100 || !numberReg.test(age)){
-                    $("#age").after('<span class="error">invalid age</span>');
-                }
-                break
-            }
+            //     if(age.length<1){
+            //         $("#age").after('<span class="error">this field is required</span>');
+            //     }
+            //     else if(age<0 || age > 100 || !numberReg.test(age)){
+            //         $("#age").after('<span class="error">invalid age</span>');
+            //     }
+            //     break
+            // }
             case "phone":{
                 $('#phone ~ span:first').remove()
                 if(phone.length<1){
@@ -189,6 +269,6 @@ $(document).ready(function(){
     
      
 
-
 })
+
 

@@ -11,11 +11,10 @@
 	<link rel="stylesheet" href="assets/styles.css" />
 	<script src="assets/js/jquery-3.3.1.min.js"></script>
 	<script src="assets/js/registration.js"></script>
-	
 
 </head>
 <!-- -------------------navbar------------------------ -->
-<body>	
+<body  onload="document.registration.userid.focus();">	
 	
 		<div class="navbar_class">
 				<header id="header">
@@ -36,10 +35,16 @@
 				</div>
 				
 
-				<form class="login100-form validate-form" id="reg_form">
+				<form name='registration' onSubmit="return formValidation();" class="login100-form validate-form" id="reg_form">
 					<span class="login100-form-title">
 						Student Registration
 					</span>
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="Userpic">Profile Picture</label>
+					
+						<input class="input100" type="file" id="image" placeholder="User photo">
+						<input name="Submit" type="submit" value="Upload image">
+					</div>
 					<!-- -------------------username------------------------------------- -->
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
 							<label for="Username">Username</label>
@@ -49,7 +54,8 @@
 
 <!-- ------------------------------------------password---------------------------------- -->
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-							<label for="password1">Password</label>
+							<label for="pas
+							+sword1">Password</label>
 						<input class="input100" type="password" id="password1" placeholder="password">
 					</div>
 
@@ -65,6 +71,15 @@
 							<label for="name">Name</label>
 						<input class="input100" type="text" id="name" placeholder="Your name">
 					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="name">Guardian's Name</label>
+						<input class="input100" type="text" id="guardian_name" placeholder="Your father's name">
+					</div>
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+							<label for="dob">Date of Birth</label>
+						<input class="input100" type="date" id="dob" placeholder="Your DoB">
+					</div>
+					
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
 							<label for="gender">Gender:</label>
 										<label for="male">Male</label>
@@ -82,20 +97,23 @@
 					</div>
 <!-- ---------------------------------age---------------------------------------- -->
 
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+					<!-- <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
 							<label for="age">Age</label>
 						<input class="input100" type="number" id="age" placeholder="Age">
-					</div>
+					</div> -->
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
 							<label for="branch">Branch</label>
 						<!-- <input class="input100" type="text" name="email" placeholder="Branch"> -->
 						<select id="branch"> 
 								<option value="1">BIOTECHNOLOGY</option>
-								<option value="2">IT</option>
-								<option value="3">ME</option>
-								<option value="4">ECE</option>
-								<option value="5">EE</option>
-								<option value="6">MME</option>
+								<option value="2">INFORMATION TECHNOLOGY</option>
+								<option value="3">MECHANICAL ENGINEERING</option>
+								<option value="4">ELECTRONICS AND COMMUICATION ENGINEERING</option>
+								<option value="5">ELECTRICAL ENGINEERING</option>
+								<option value="6">MATERIALS AND METALURGICAL ENGINEERING</option>
+								<option value="7">CIVIL ENGINEERING</option>
+								<option value="8">COMPUTER SCIENCE AND ENGINEERING</option>
+								<option value="9">CHEMICAL ENGINEERING</option>
 	
 							</select>
 					</div>

@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,jsonify,json,Response
+from flask import Flask,render_template,request,jsonify,json,Response,session,redirect
 from datetime import date
 from marshmallow import Schema, fields, pprint, ValidationError
 from werkzeug import generate_password_hash, check_password_hash
@@ -64,6 +64,53 @@ def usernameExists():
                 "code":500,
             }
             return jsonify(response)
+
+@app.route("/login",methods=['GET','POST'])
+def login():
+    if session.get('logged_in'):
+        return redirect('/')
+    errors=[]
+    if request.method == 'POST':
+        username = request.form.get('email')
+        password = request.form.get('pass')
+        if username!=None and password!=None:
+            conn = connection()
+            c = conn.cursor()
+            query = 'Select password,active,Isadmin from User where username = %s;'
+            print(query)
+            c.execute(query,(thwart(username),))
+            result = c.fetchone()
+            print(result)
+            if result != None:
+                password_hash = result[0]
+                active  = result[1]
+                isadmin = result[2]
+                if check_password_hash(password_hash,password):
+                    if active == 1:
+                        session['logged_in'] = True
+                        session['username'] = username
+                        if isadmin == 1:
+                            session['isadmin'] = True
+                        return redirect('/')
+                    else:
+                        errors = ['acount has not been activated']
+                else:
+                    errors = ['wrong username or password']
+
+            else:
+                errors = ['that username does not exist']
+    return render_template('login_page.html',errors=errors)
+
+@app.route('/logout',methods = ['GET'])
+def logout():
+    session.pop('logged_in',None)
+    session.pop('username',None)
+    return redirect('/')
+
+
+
+
+        
                         
 
 @app.route("/ajax/post/registeruser",methods=['POST'])
@@ -102,9 +149,6 @@ def registerUser():
                 "code":500,
             }
             return jsonify(response) 
-        
-        c.close()
-        conn.close()
         response = {
                 "code":200,
             }
@@ -117,4 +161,5 @@ def registerUser():
 
 
 if __name__ == "__main__":
+    app.secret_key = "hosuhojfdoasidjpqwe21413"
     app.run(port=8080)

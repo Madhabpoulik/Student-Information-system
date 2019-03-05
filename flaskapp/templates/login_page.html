@@ -29,7 +29,7 @@
 					<img src="images/NIT_Durgapur_Logo.png" alt="IMG">
 				</div>
 
-				<form class="login100-form validate-form">
+				<form class="login100-form validate-form" method="POST">
 					<span class="login100-form-title">
 						Student Login
 					</span>
@@ -40,6 +40,11 @@
 
 					<div class="wrap-input100 validate-input" data-validate = "Password is required">
 						<input class="input100" type="password" name="pass" placeholder="Password">
+					</div>
+					<div>
+						{%for e in errors %}
+						<span class="error">{{e}}</span><br>
+						{%endfor%}
 					</div>
 					
 					<div class="container-login100-form-btn">

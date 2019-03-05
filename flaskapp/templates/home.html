@@ -56,7 +56,10 @@
                 <section>
                     <div class="row">
                         <p>
-                                    <a href="login_page.html">
+                            {%if session['logged_in']%}
+                            <p>Welcome {{session['username']}}</p>
+                            {%else%}
+                                    <a href="/login">
                                             <div class="content column login_container" >
                                                     <header>
                                                         <img src="images/clipboard.png" >
@@ -65,7 +68,7 @@
                                                     <p>Students who want to see their personal details.</p>
                                                 </div>
                                     </a>
-
+                            {%endif%}
                                     
                                     <div class="content column noticeBoard_container">
                                         <header>

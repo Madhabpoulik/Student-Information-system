@@ -32,9 +32,41 @@ def register():
     return render_template('registration.html')
 
 
+@app.route('/ajax/get/usernameexists',methods=['POST'])
+def usernameExists():
+    if request.is_json:
+        jsonstr = request.get_json()
+        print(jsonstr)
+        try:
+            username = jsonstr['username']
+        except:
+            return Response(status=500)
+        print(username)
+        try:
+            conn = connection()
+            c=conn.cursor()
+        except:
+            print("db connection error")
+        try:
+            query = 'SELECT EXISTS( SELECT * FROM User WHERE username = %s);'
+            print(query)
+            c.execute(query,(thwart(username),))
+            result = c.fetchone()
+            print(result)
+            response = {
+                "code":200,
+                "exist":result[0]
+            }
+            return jsonify(response)
+        except:
+            print("query error")
+            response = {
+                "code":500,
+            }
+            return jsonify(response)
+                        
 
-
-@app.route("/registeruser",methods=['POST'])
+@app.route("/ajax/post/registeruser",methods=['POST'])
 def registerUser():
     # print(request.is_json)
     if request.is_json:
@@ -54,16 +86,22 @@ def registerUser():
             }
             return jsonify(response)
 
-        conn = connection()
-        c=conn.cursor()
-        hashed_password = generate_password_hash(result['password1'])
-        query = "INSERT INTO `sis_project`.`User` ( `Username`, `Password`, `Email`, `Isadmin`, `active`) VALUES (%s, %s, %s, '0', '0');"
-        print(query)
         try:
+            conn = connection()
+            c=conn.cursor()
+        except:
+            print("db connection error")
+        try:
+            hashed_password = generate_password_hash(result['password1'])
+            query = "INSERT INTO `sis_project`.`User` ( `Username`, `Password`, `Email`, `Isadmin`, `active`) VALUES (%s, %s, %s, '0', '0');"
+            print(query)
             c.execute(query,(thwart(result['username']),thwart(hashed_password),thwart(result['email'])))
             conn.commit()
         except:
-            return json.dumps("internal server error") 
+            response = {
+                "code":500,
+            }
+            return jsonify(response) 
         
         c.close()
         conn.close()

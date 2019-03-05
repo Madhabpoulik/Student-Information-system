@@ -50,8 +50,7 @@ $(document).ready(function(){
         var name = $('#name').val();
         var email = $('#email').val();
         var dob = $('#dob').val();
-//        var age = $('#age').val();
-        var g_name = $('#guardian_name')
+        var g_name = $('#guardian_name').val()
         var branch = $('#branch').val();
         var semester = $('#semester').val();
         var phone = $('#phone').val();
@@ -124,18 +123,54 @@ $(document).ready(function(){
             
             $("#dob").after('<span class="error">invalid date</span>');
         }
+
+
+        $.ajax({
+            url: '/registeruser',
+            dataType : "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                username : username,
+                name : name,
+                email : email,
+                dob : dob,
+                g_name : g_name,
+                phone : phone,
+                branch : branch,
+                password1 : password1,
+                password2 : password2,
+                address : address
+            }),
+
+            //data:{id:username,def:email},
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+                if(response['code']==200)
+                {alert('successfully registered');}
+                else{
+                    alert('intenal server error');
+                }
+
+            },
+            error: function(error) {
+                console.log(error);
+                alert('error occured try again later')
+            }
+        });
+
     
     }
-    $(".input100").change(function(){
-        validate();
-    })
+    // $(".input100").change(function(){
+    //     validate();
+    // })
     
 
 
     function inline_validate(s){
         var username = $('#username').val();
         var name = $('#name').val();
-        var g_name = $('#guardian_name')
+        var g_name = $('#guardian_name').val()
         var dob = $('#dob').val()
         var email = $('#email').val();
         var age = $('#age').val();
@@ -210,8 +245,8 @@ $(document).ready(function(){
                 $('#password1 ~ span:first').remove()
                 if (password1.length < 8) {
                     $('#password1').after('<span class="error">Password must be at least 8 characters long</span>');
-                    $("#password1").val('');
-                    $("#password2").val('');
+                    //$("#password1").val('');
+                    //$("#password2").val('');
                 }
                 break
             }
@@ -220,8 +255,8 @@ $(document).ready(function(){
                 $('#password2 ~ span:first').remove()
                 if (password2 != password1) {
                     $('#password2').after('<span class="error">Passwords don\'t match</span>');
-                    $("#password1").val('');
-                    $("#password2").val('');
+                    //$("#password1").val('');
+                    //$("#password2").val('');
                 }
                 break
             }   
@@ -264,6 +299,7 @@ $(document).ready(function(){
 
 
     $(".input100").focusout(function(){
+        console.log($(this).attr('id'))
         inline_validate($(this).attr('id'));
     })
     

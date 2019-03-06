@@ -1,8 +1,8 @@
 $(document).ready(function(){
 
 
-
     
+    var username_allowed = false;
 
     $('#reg_form').submit(function(e) {
         e.preventDefault();
@@ -82,31 +82,32 @@ $(document).ready(function(){
             $('#username').after('<span class="error">username can have only aplhanumeric characters</span>');
         }
         
-        if (name.length < 1) {
+        else if (name.length < 1) {
             $('#name').after('<span class="error">This field is required</span>');
         }
         else if (!stringReg.test(name)){
             $('#name').after('<span class="error">invalid name</span>');
         }
-        if (f_name.length < 1) {
+        else if (f_name.length < 1) {
             $('#f_name').after('<span class="error">This field is required</span>');
         }
         else if (!stringReg.test(f_name)){
             $('#f_name').after('<span class="error">invalid father name</span>');
         }
-        if (m_name.length < 1) {
+        else if (m_name.length < 1) {
             $('#m_name').after('<span class="error">This field is required</span>');
         }
+
         else if (!stringReg.test(m_name)){
             $('#m_name').after('<span class="error">invalid mother name</span>');
         }
-        if (email.length < 1) {
+        else if (email.length < 1) {
           $('#email').after('<span class="error">This field is required</span>');
         }
         else if (!emailReg.test(email)){
             $('#email').after('<span class="error">invalid email</span>');
         }
-        if (password1.length < 8) {
+        else if (password1.length < 8) {
             $('#password1').after('<span class="error">Password must be at least 8 characters long</span>');
             $("#password1").val('');
             $("#password2").val('');
@@ -116,44 +117,102 @@ $(document).ready(function(){
             $("#password1").val('');
             $("#password2").val('');
         }
-        // if(age.length<1){
-        //     $("#age").after('<span class="error">this field is required</span>');
-        // }
-        // else if(age<0 || age > 100 || !numberReg.test(age)){
-        //     $("#age").after('<span class="error">invalid age</span>');
-        // }
-        if(phone.length<1){
+        else if(phone.length<1){
             $("#phone").after('<span class="error">This field is required</span>');
         }
         else if(phone.length>10||!numberReg.test(phone)){
             $("#phone").after('<span class="error">invalid phone number</span>');
         }
-        if(age.length<1){
-            $("#phone").after('<span class="error">This field is required</span>');
-        }
-        else if(age.length>2||!numberReg.test(age)){
-            $("#phone").after('<span class="error">invalid age number</span>');
-        }
-        if(pincode.length<1){
-            $("#phone").after('<span class="error">This field is required</span>');
+        else if(pincode.length<1){
+            $("#pincode").after('<span class="error">This field is required</span>');
         }
         else if(pincode.length>6||!numberReg.test(pincode)){
-            $("#phone").after('<span class="error">invalid pin number</span>');
+            $("#pincode").after('<span class="error">invalid pin number</span>');
         }
-        if(address.length<1){
+        else if(address.length<1){
             $("#address").after('<span class="error">this field is required</span>');
         }
-        if(city.length<1){
+        else if(city.length<1){
             $("#address").after('<span class="error">this field is required</span>');
         }
-        if(!isDate(dob)){
+        else if(!isDate(dob)){
             
             $("#dob").after('<span class="error">invalid date</span>');
         }
+        else{
+            if(username_allowed){
+                register();
+            }
+            else if(check_username_exist()){
+                register();
+            }
+        }
+
+
+        
+    
+    }
+
+    function check_username_exist(){
+
+        var username = $('#username').val();
+
+        username_allowed = false;
+        $.ajax({
+            url: '/ajax/get/usernameexists',
+            dataType : "json",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                username : username
+            }),
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+                if(response['code']==200)
+                {
+                    console.log(response)
+                    if(response['exist']===0){
+                        username_allowed = true
+                        return true
+                    }
+                    else{
+                        $('#username').after('<span class="error">username already exists</span>');
+                        return(false)
+                    }
+                    
+                }
+                else{
+                    alert('internal server error')
+                }
+
+            },
+            error: function(error) {
+                console.log(error);
+                alert('error occured try again later')
+            }
+        });
+
+
+    }
+
+    function register(){
+
+        var username = $('#username').val();
+        var name = $('#name').val();
+        var email = $('#email').val();
+        var dob = $('#dob').val();
+        var g_name = $('#guardian_name').val()
+        var branch = $('#branch').val();
+        var semester = $('#semester').val();
+        var phone = $('#phone').val();
+        var password1 = $('#password1').val();
+        var password2 = $('#password2').val();
+        var address= $('#address').val();
+    
 
 
         $.ajax({
-            url: '/registeruser',
+            url: 'ajax/post/registeruser',
             dataType : "json",
             contentType: 'application/json',
             data: JSON.stringify({
@@ -175,7 +234,10 @@ $(document).ready(function(){
             success: function(response) {
                 console.log(response);
                 if(response['code']==200)
-                {alert('successfully registered');}
+                {
+                    alert('successfully registered');
+                    username_allowed=false;
+                }
                 else{
                     alert('intenal server error');
                 }
@@ -187,7 +249,6 @@ $(document).ready(function(){
             }
         });
 
-    
     }
     // $(".input100").change(function(){
     //     validate();
@@ -261,6 +322,7 @@ $(document).ready(function(){
                 else if (!usernamereg.test(username)){
                     $('#username').after('<span class="error">username can have only aplhanumeric characters</span>');
                 }
+                check_username_exist()
                 break;
             }
             case "name":{
@@ -318,8 +380,6 @@ $(document).ready(function(){
                 $('#password1 ~ span:first').remove()
                 if (password1.length < 8) {
                     $('#password1').after('<span class="error">Password must be at least 8 characters long</span>');
-                    //$("#password1").val('');
-                    //$("#password2").val('');
                 }
                 break
             }
@@ -328,22 +388,9 @@ $(document).ready(function(){
                 $('#password2 ~ span:first').remove()
                 if (password2 != password1) {
                     $('#password2').after('<span class="error">Passwords don\'t match</span>');
-                    //$("#password1").val('');
-                    //$("#password2").val('');
                 }
                 break
             }   
-            case "age":{
-                $('#age ~ span:first').remove()
-
-                if(age.length<1){
-                    $("#age").after('<span class="error">this field is required</span>');
-                }
-                else if(age<0 || age > 100 || !numberReg.test(age)){
-                    $("#age").after('<span class="error">invalid age</span>');
-                }
-                break
-            }
             case "phone":{
                 $('#phone ~ span:first').remove()
                 if(phone.length<1){

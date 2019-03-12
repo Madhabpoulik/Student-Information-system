@@ -206,7 +206,6 @@ $(document).ready(function(){
                 address : address
             }),
 
-            //data:{id:username,def:email},
             type: 'POST',
             success: function(response) {
                 console.log(response);
@@ -214,6 +213,7 @@ $(document).ready(function(){
                 {
                     alert('successfully registered');
                     username_allowed=false;
+                    window.location.href = "/"
                 }
                 else{
                     alert('intenal server error');

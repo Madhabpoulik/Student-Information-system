@@ -1,27 +1,39 @@
 from flask import Flask,render_template,request,jsonify,json,Response,session,redirect
-from datetime import date
+import datetime
 from marshmallow import Schema, fields, pprint, ValidationError
 from werkzeug import generate_password_hash, check_password_hash
-from dbconnection import connection
-import MySQLdb
-from MySQLdb import escape_string as thwart
+# from dbconnection import connection
+# import MySQLdb
+# from MySQLdb import escape_string as thwart
+# from flask.ext.sqlalchemy import SQLAlchemy
+from models import *
+app = Flask(__name__,static_url_path='',static_folder='templates/static/')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://sis_app:p@ssword@localhost/sis_project2'
+db.init_app(app)
+
 
 class UserSchema(Schema):
     username = fields.Str(required=True)
     name = fields.Str(required=True)    
     email = fields.Email(required=True)
     dob = fields.Date(required=True)
-    g_name = fields.Str(required=True)
+    gender = fields.Str(required=True)
+    f_name = fields.Str(required=True)
+    m_name = fields.Str(required=True)
     phone = fields.Str(required=True)
-    branch = fields.Str(required=True)
+    semester = fields.Integer(required=True)
+    branch = fields.Integer(required=True)
     password1 = fields.Str(required=True)
-    password2 =  fields.Str(required=True)
     address = fields.Str(required=True)
+    city = fields.Str(required=True)
+    pincode = fields.Str(required=True)
+    country = fields.Str(required=True)
+    state = fields.Str(required=True)
 #todo put validation
 
 
 
-app = Flask(__name__,static_url_path='',static_folder='templates/static/')
+
 
 @app.route("/")
 def main():
@@ -43,19 +55,12 @@ def usernameExists():
             return Response(status=500)
         print(username)
         try:
-            conn = connection()
-            c=conn.cursor()
-        except:
-            print("db connection error")
-        try:
-            query = 'SELECT EXISTS( SELECT * FROM User WHERE username = %s);'
-            print(query)
-            c.execute(query,(thwart(username),))
-            result = c.fetchone()
-            print(result)
+            exists=1
+            if User.query.filter_by(username=username).scalar() is None:
+                exists=0
             response = {
                 "code":200,
-                "exist":result[0]
+                "exist":exists
             }
             return jsonify(response)
         except:
@@ -74,22 +79,17 @@ def login():
         username = request.form.get('email')
         password = request.form.get('pass')
         if username!=None and password!=None:
-            conn = connection()
-            c = conn.cursor()
-            query = 'Select password,active,Isadmin from User where username = %s;'
-            print(query)
-            c.execute(query,(thwart(username),))
-            result = c.fetchone()
-            print(result)
-            if result != None:
-                password_hash = result[0]
-                active  = result[1]
-                isadmin = result[2]
+            u = User.query.filter_by(username=username).first()
+            print(u)
+            if u != None:
+                password_hash = u.password
+                active  = u.isactive
+                isadmin = u.isadmin
                 if check_password_hash(password_hash,password):
-                    if active == 1:
+                    if active:
                         session['logged_in'] = True
                         session['username'] = username
-                        if isadmin == 1:
+                        if isadmin:
                             session['isadmin'] = True
                         return redirect('/')
                     else:
@@ -105,6 +105,7 @@ def login():
 def logout():
     session.pop('logged_in',None)
     session.pop('username',None)
+    session.pop('isadmin',None)
     return redirect('/')
 
 
@@ -125,8 +126,8 @@ def registerUser():
         except ValidationError as err:
             print(err)
             error_list = []
-            for e in err.messages.keys:
-                error_list.extend(err.messages[e])
+            for e in err.messages:
+                error_list.extend(e)
             response = {
                 "code":500,
                 "errors":error_list
@@ -134,16 +135,28 @@ def registerUser():
             return jsonify(response)
 
         try:
-            conn = connection()
-            c=conn.cursor()
-        except:
-            print("db connection error")
-        try:
+            # import pdb;pdb.set_trace();
             hashed_password = generate_password_hash(result['password1'])
-            query = "INSERT INTO `sis_project`.`User` ( `Username`, `Password`, `Email`, `Isadmin`, `active`) VALUES (%s, %s, %s, '0', '0');"
-            print(query)
-            c.execute(query,(thwart(result['username']),thwart(hashed_password),thwart(result['email'])))
-            conn.commit()
+            u = User(username = result['username'],password = hashed_password,email=result['email'],isactive=False,isadmin=False)
+            
+            age = datetime.datetime.now().year - result['dob'].year
+            add = result['address']+';'+result['city']+';'+result['state']+';'+result['pincode']+';'+result['country']
+            s = Student(
+                age=age,
+                user=u,
+                branch_id=result['branch'],
+                name=result['name'],
+                semester=result['semester'],
+                phone = result['phone'],
+                address = add,
+                gender = result['gender'],
+                fname = result['f_name'],
+                mname = result['m_name'],
+                dob = result['dob']
+
+                )
+            db.session.add(u) 
+            db.session.commit()
         except:
             response = {
                 "code":500,
@@ -155,6 +168,41 @@ def registerUser():
         return jsonify(response)
     return Response(status=401)
     
+@app.route('/admin',methods=['GET'])
+def adminPanel():
+    if session.get('isadmin'):
+
+        u_list = User.query.filter_by(isactive=False).all()
+
+        return render_template("admin_panel.html",u_list=u_list)
+    else:
+        return Response("unauthorized",status=401)
+
+@app.route('/ajax/activate_account',methods=['POST'])
+def activate_account():
+    if session.get('isadmin'):
+        jsonstr = request.get_json()
+        uid = jsonstr['uid']
+        make_admin = jsonstr['make_admin']
+        u = User.query.filter_by(id=uid).first()
+        if u is not None:
+            u.isactive = True
+            u.isadmin = make_admin
+            db.session.add(u)
+            db.session.commit()
+            res = {
+                'code':200
+            }
+        else:
+            res = {
+            'code': 500 
+            }
+        return jsonify(res)
+
+    else:
+        return Response("unauthorized",status=401)
+
+
 
 
 

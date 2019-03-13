@@ -50,13 +50,19 @@ $(document).ready(function(){
         var name = $('#name').val();
         var email = $('#email').val();
         var dob = $('#dob').val();
-        var g_name = $('#guardian_name').val()
+        var f_name = $('#f_name').val()
+        var m_name = $('#m_name').val()
         var branch = $('#branch').val();
         var semester = $('#semester').val();
         var phone = $('#phone').val();
         var password1 = $('#password1').val();
         var password2 = $('#password2').val();
         var address= $('#address').val();
+        // var age = $('#age').val();
+        var state = $('#state').val();
+        var city = $('#city').val();
+        var pincode = $('#pincode').val();
+        var country = $('#country').val();
     
         var usernamereg = /^[a-zA-Z0-9]+$/;
         var stringReg = /^[A-Za-z]+$/;
@@ -82,11 +88,18 @@ $(document).ready(function(){
         else if (!stringReg.test(name)){
             $('#name').after('<span class="error">invalid name</span>');
         }
-        else if (g_name.length < 1) {
-            $('#guardian_name').after('<span class="error">This field is required</span>');
+        else if (f_name.length < 1) {
+            $('#f_name').after('<span class="error">This field is required</span>');
         }
-        else if (!stringReg.test(g_name)){
-            $('#guardian_name').after('<span class="error">invalid guardian name</span>');
+        else if (!stringReg.test(f_name)){
+            $('#f_name').after('<span class="error">invalid father name</span>');
+        }
+        else if (m_name.length < 1) {
+            $('#m_name').after('<span class="error">This field is required</span>');
+        }
+
+        else if (!stringReg.test(m_name)){
+            $('#m_name').after('<span class="error">invalid mother name</span>');
         }
         else if (email.length < 1) {
           $('#email').after('<span class="error">This field is required</span>');
@@ -110,7 +123,16 @@ $(document).ready(function(){
         else if(phone.length>10||!numberReg.test(phone)){
             $("#phone").after('<span class="error">invalid phone number</span>');
         }
+        else if(pincode.length<1){
+            $("#pincode").after('<span class="error">This field is required</span>');
+        }
+        else if(pincode.length>6||!numberReg.test(pincode)){
+            $("#pincode").after('<span class="error">invalid pin number</span>');
+        }
         else if(address.length<1){
+            $("#address").after('<span class="error">this field is required</span>');
+        }
+        else if(city.length<1){
             $("#address").after('<span class="error">this field is required</span>');
         }
         else if(!isDate(dob)){
@@ -179,13 +201,19 @@ $(document).ready(function(){
         var name = $('#name').val();
         var email = $('#email').val();
         var dob = $('#dob').val();
-        var g_name = $('#guardian_name').val()
+        var f_name = $('#f_name').val()
+        var m_name = $('#m_name').val()
         var branch = $('#branch').val();
         var semester = $('#semester').val();
         var phone = $('#phone').val();
         var password1 = $('#password1').val();
         var password2 = $('#password2').val();
         var address= $('#address').val();
+        var gender = $("input[name='gender']:checked").val();
+        var state = $('#state option:selected').html();
+        var city = $('#city').val();
+        var pincode = $('#pincode').val();
+        var country = $('#country option:selected').html();
     
 
 
@@ -198,12 +226,20 @@ $(document).ready(function(){
                 name : name,
                 email : email,
                 dob : dob,
-                g_name : g_name,
+                gender: gender,
+                f_name : f_name,
+                m_name : m_name,
                 phone : phone,
                 branch : branch,
                 password1 : password1,
-                password2 : password2,
-                address : address
+                address : address,
+                state : state,
+                city : city,
+                country : country,
+                pincode : pincode,
+                country : country,
+                semester : semester
+
             }),
 
             type: 'POST',
@@ -227,25 +263,64 @@ $(document).ready(function(){
         });
 
     }
-    
+    // $(".input100").change(function(){
+    //     validate();
+    // })
+
+
+    $('#fileToUpload').change(function(){
+        fileValidation();
+    })
+
+
+    function fileValidation(){
+        console.log('hello')
+        var fileInput = document.getElementById('fileToUpload');
+        var filePath = fileInput.value;
+        var exts = ['.jpg', '.gif', '.png'];
+        if(!new RegExp('(' + exts.join('|').replace(/\./g, '\\.') + ')$').test(filePath)){
+            alert('Please upload file having extensions .jpeg/.jpg/.png/.gif only.');
+            fileInput.value = '';
+            console.log(fileInput.value)
+            document.getElementById('imagePreview').innerHTML = "";
+            return false;
+            
+        }else{
+            //Image preview
+            if (fileInput.files && fileInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').innerHTML = '<img src="'+e.target.result+'"/>';
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        }
+    }
+
+
     function inline_validate(s){
         var username = $('#username').val();
         var name = $('#name').val();
-        var g_name = $('#guardian_name').val()
-        var dob = $('#dob').val()
         var email = $('#email').val();
-        var age = $('#age').val();
+        var dob = $('#dob').val();
+        var f_name = $('#f_name').val()
+        var m_name = $('#m_name').val()
         var branch = $('#branch').val();
         var semester = $('#semester').val();
         var phone = $('#phone').val();
         var password1 = $('#password1').val();
         var password2 = $('#password2').val();
         var address= $('#address').val();
+        var age = $('#age').val();
+        var state = $('#state').val();
+        var city = $('#city').val();
+        var pincode = $('#pincode').val();
+        var country = $('#country').val();
     
         var usernamereg = /^[a-zA-Z0-9]+$/;
         var stringReg = /^[A-Za-z]+$/;
         var numberReg =  /^[0-9]+$/;
-        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+        var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/; 
     
         
         
@@ -273,13 +348,24 @@ $(document).ready(function(){
                 }
                 break
             }
-            case "guardian_name":{
-                $('#guardian_name ~ span:first').remove()
-                if (g_name.length < 1) {
-                $('#guardian_name').after('<span class="error">This field is required</span>');
+            case "f_name":{
+                console.log(f_name)
+                $('#f_name ~ span:first').remove()
+                if (f_name.length < 1) {
+                $('#f_name').after('<span class="error">This field is required</span>');
                 }
-                else if (!stringReg.test(g_name)){
-                    $('#guardian_name').after('<span class="error">invalid guardian name</span>');
+                else if (!stringReg.test(f_name)){
+                    $('#f_name').after('<span class="error">invalid father name</span>');
+                }
+                break
+            }
+            case "mother_name":{
+                $('#m_name ~ span:first').remove()
+                if (m_name.length < 1) {
+                $('#m_name').after('<span class="error">This field is required</span>');
+                }
+                else if (!stringReg.test(m_name)){
+                    $('#m_name').after('<span class="error">invalid mother name</span>');
                 }
                 break
             }
@@ -328,10 +414,31 @@ $(document).ready(function(){
                 }
                 break
             }
+            case "pincode":{
+                $('#pincode ~ span:first').remove()
+                if(pincode.length<1){
+                    $("#pincode").after('<span class="error">This field is required</span>');
+                }
+                else if(pincode.length>10||!numberReg.test(pincode)){
+                    $("#pincode").after('<span class="error">invalid pincode number</span>');
+                }
+                break
+            }
+            
             case "address":{
                 $('#adress ~ span:first').remove()
                 if(address.length<1){
                     $("#address").after('<span class="error">this field is required</span>');
+                }
+                break
+            }
+            case "city":{
+                $('#city ~ span:first').remove()
+                if (name.length < 1) {
+                $('#city').after('<span class="error">This field is required</span>');
+                }
+                else if (!stringReg.test(name)){
+                    $('#city').after('<span class="error">invalid name</span>');
                 }
                 break
             }
@@ -341,6 +448,14 @@ $(document).ready(function(){
         }
 
     }
+    // function nextstep() {
+    //     var x = document.getElementById("next_step");
+    //     if (x.style.display === "none") {
+    //       x.style.display = "block";
+    //     } else {
+    //       x.style.display = "none";
+    //     }
+    //   }
 
 
 

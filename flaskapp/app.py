@@ -171,9 +171,10 @@ def registerUser():
 def adminPanel():
     if session.get('isadmin'):
 
-        u_list = User.query.filter_by(isactive=False).all()
+        inactive_u_list = User.query.filter_by(isactive=False).all()
+        active_u_list = User.query.filter_by(isactive=True).all()
+        return render_template("admin_panel.html",u_list=inactive_u_list)
 
-        return render_template("admin_panel.html",u_list=u_list)
     else:
         return Response("unauthorized",status=401)
 
@@ -202,8 +203,12 @@ def activate_account():
     else:
         return Response("unauthorized",status=401)
 
-
-
+@app.route('/viewprofile',methods=['GET'])
+def vew_profile():
+    if session.get('loggedin'):
+        username = session.get('username')
+        user = User.query.filter_by(username = username).first()
+        return render_template('profilepage.html',user=user)
 
 
 

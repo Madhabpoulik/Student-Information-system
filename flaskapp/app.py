@@ -116,7 +116,6 @@ def logout():
 
 @app.route("/ajax/post/registeruser",methods=['POST'])
 def registerUser():
-    # print(request.is_json)
     if request.is_json:
         jsonstr = request.get_json()
         schema = UserSchema()
@@ -177,6 +176,7 @@ def adminPanel():
         return render_template("admin_panel.html",u_list=u_list)
     else:
         return Response("unauthorized",status=401)
+
 
 @app.route('/ajax/activate_account',methods=['POST'])
 def activate_account():

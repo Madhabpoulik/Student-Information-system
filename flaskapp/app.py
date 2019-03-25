@@ -6,7 +6,7 @@ from werkzeug import generate_password_hash, check_password_hash
 # import MySQLdb
 # from MySQLdb import escape_string as thwart
 # from flask.ext.sqlalchemy import SQLAlchemy
-from models import *
+from .models import *
 app = Flask(__name__,static_url_path='',static_folder='templates/static/')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://sis_app:p@ssword@localhost/sis_project2'
 db.init_app(app)

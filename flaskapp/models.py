@@ -33,7 +33,7 @@ class Student(db.Model):
     dob = db.Column(db.Date(),nullable=False)
 
 
-    courses = relationship("Course", secondary="marks")
+    courses = db.relationship("Course", secondary="marks")
 
     def __repr__(self):
         return '<Student %r>' % self.name
@@ -51,7 +51,7 @@ class Branch(db.Model):
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     course_name = db.Column(db.String(100),nullable=False)
-    students = relationship("Student", secondary="marks")
+    students = db.relationship("Student", secondary="marks")
     
     def __repr__(self):
         return '<Course %r>' % self.course_name
@@ -62,8 +62,8 @@ class Marks(db.Model):
     course_id = db.Column(db.Integer, db.ForeignKey('course.id'),nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'),nullable=False)
 
-    student = relationship(Student, backref=backref("marks", cascade="all, delete-orphan"))
-    course = relationship(course, backref=backref("marks", cascade="all, delete-orphan"))
+    student = db.relationship(Student, backref=db.backref("marks", cascade="all, delete-orphan"))
+    course = db.relationship(Course, backref=db.backref("marks", cascade="all, delete-orphan"))
 
     def __repr__(self):
         return '<marks %r>' % self.id
